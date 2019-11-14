@@ -48,7 +48,7 @@ def search_engine_1():
 
     query=input('Give me a query :)')
 
-    query_words=cleaner(query)
+    query_words=set(cleaner(query))
     posts_list=[]
     start=time.time()
     for word in query_words: # iterate over words
