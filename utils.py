@@ -71,7 +71,7 @@ def search_engine_1():
         out_doc=[]
         with open(path_tsv+name_file_tsv, 'r') as file: #open the file
             file_tsv_reader=csv.reader(file, delimiter='\t') #read it
-            list_file_content=[row for row in file_tsv_reader][0]
+            list_file_content=next(file_tsv_reader)#read the only one line
             #print(type(list_file_content))
             out_doc.append(list_file_content[0]) #append title
             out_doc.append(list_file_content[1])#append intro
