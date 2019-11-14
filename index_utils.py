@@ -8,21 +8,6 @@ def create_vocabulary(path_tsv):
                     if vocab.get(w, None)==None:#if v not in vocabulary:
                         vocab[w]=len(vocab) #add it
 
-def cleaner(text):#input: a text to be clean:
-                    #output: a list of words of the text cleaned
-
-    # remove remaining tokens that are not alphabetic
-    clean_text="".join([ch if ch.isalnum() else " " for ch in text]) #trasform all non alnumeric character
-                                                                    #into a space
-    words = word_tokenize(clean_text)
-    # filter out stop words
-    stop_words = set(stopwords.words('english'))
-    words = [w for w in words if not w in stop_words]
-    # stemming of words
-    porter = PorterStemmer()
-    stemmed = [porter.stem(w) for w in words]
-
-    return(stemmed)
 
 def number_document_html(file):#input: the name of the document; easy to obtain.. it's the file in: file in sorted(os.listdir(path))
     if type(file)!=str:
