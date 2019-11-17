@@ -25,3 +25,8 @@ Following you can find an explanation of all files in this repository:
 * `exercise_4.py`: python file that contains the implementation of the algorithm that solves problem 4.
 
 * `main.ipynb`: a Jupyter notebook explaines the strategies our adopted solving the homework.
+
+This repository also contains:
+* `vocabulary.pkl`: a pickle file that contains the vocabulary 
+* `movieTot.txt`: a text file with the wole urls
+* `inverted_index.pkl`,`inverted_index2.pkl`,`inverted_index3.pkl`: the indices to build up our three search engine
