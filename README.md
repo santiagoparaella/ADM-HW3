@@ -11,6 +11,8 @@ Following you can find an explanation of all files in this repository:
 
 * `(this)README.md`: a Markdown file that explains the content of this repository. As we are doing it explain for all file what it contains.
 
+* `header.py`: a oython file that contains the costants of the HW.
+
 * `collector.py`: a python file that contains the line of code needed to collect our data from the `html` page (from which you get the urls) and Wikipedia.
 * `collector_utils.py`: a python file that stores the function we used in `collector.py`.
 * `parser.py`: a python file that contains the line of code needed to parse the entire collection of `html` pages and save those in `tsv` files.
