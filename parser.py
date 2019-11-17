@@ -1,3 +1,4 @@
+'''
 import requests as req
 from bs4 import BeautifulSoup
 import random
@@ -10,11 +11,8 @@ import numpy as np
 import collections
 import csv
 import traceback
-
-from parser_utils import find_intro
-from parser_utils import find_plot
-from parser_utils import find_info
-from parser_utils import clean_all
+from utils import number_document_html
+'''
 from parser_utils import save_as_tsv
 
 save_as_tsv()

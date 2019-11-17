@@ -10,8 +10,8 @@ import numpy as np
 import collections
 
 import collector_utils as cu
-path = "/Users/Dario/Desktop/HMW3_Data/"
+import hader as h
 
 for i in range(1, 4, 1):
-    url='https://raw.githubusercontent.com/CriMenghini/ADM/master/2019/Homework_3/data/movies'+str(i)+'.html'
-    cu.crawl(url, '/tmp/')
+    url=h.PATH_MOVIE_DOWNLOAD+'movies'+str(i)+'.html'
+    cu.crawl(url, h.PATH_MOVIE)

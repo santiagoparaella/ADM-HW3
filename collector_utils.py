@@ -1,4 +1,4 @@
-def crawl(url, path):
+def crawl(url, path): # the url to doanload the page movies{i}
 
     if type(path) != str: # To be sure that the path is a string
         raise Exception('input path must be a string! Not a {}'.format(type(path)))
@@ -7,11 +7,10 @@ def crawl(url, path):
     ftableS = str(soup.find_all('table')) # The link are placed in a table, we must access in it
     table = BeautifulSoup(ftableS, 'html.parser') # Now we can read (in html format) the table
     urls = table.find_all('a') # search url is between <a> and <\a>
-    i = 11420 # I get links form 20000 to 30000 (we start count from 0)
-
+    i=0
 # Let's wotk with each link:
 
-    for link in urls[1420:]:
+    for link in urls:
         with open(''.join([path, 'article_', str(i), '.html']), 'w') as f: # We want to save each content of the url
             text = req.get(link.get('href')) # "href" is part of the html code that allows us to go to the website
 

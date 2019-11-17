@@ -1,6 +1,22 @@
-def find_intro(site):
+import requests as req
+from bs4 import BeautifulSoup
+import random
+import time
+import os
+import codecs
+import re
+import json
+import numpy as np
+import collections
+import csv
+import traceback
+from utils import number_document_html
+
+def find_intro(site): #imput: the text of the site
+                        # outout: the text of the intro in the site
 
     # Deal with Page not FOund:
+
     if "Page not Found" in site.text: # If the isn't the page we return -1 it takes less time to find it later
         return -1
 
@@ -37,11 +53,12 @@ def find_intro(site):
     return intro
 
 
-def find_plot(site):
+def find_plot(site):#imput: the text of the site
+                    # outout: the text of the plot in the site
 
     # Deal with page not found
 
-    if site.text == "Page not Found": # If the isn't the page we return -1 it takes less time to find it later
+    if "Page not Found" in site.text: # If the isn't the page we return -1 it takes less time to find it later
         return -1
 
     # Deal with disanbiguation page:
@@ -68,17 +85,26 @@ def find_plot(site):
         except:
             el_name = "" # In case we don't get the tag
 
-        if el_name != "p": # When occurs the first tag different from p we stop the loop
-            plot = "\n".join(plot_lst) # So we create a string with the whole text
-            break # And stop the cycle
-        else:
-            plot_lst.append(el.text) # We append that part as text in our list
-            el = el.find_next_sibling() # And we switch to the next element
+        try:
+
+            if el_name == "h2": # When occurs the first h2 tag we stop the loop
+                plot = "\n".join(plot_lst) # So we create a string with the whole text
+                break # And stop the cycle
+            elif el_name == "p":
+                plot_lst.append(el.text) # We append that part as text in our list
+                el = el.find_next_sibling() # And we switch to the next element
+            else:
+                el = el.find_next_sibling()
+
+        except: # It can happens that no h2 appears (p tags are only after an h2), in this case we arrive till the end of the page, then e stop.
+            plot = "\n".join(plot_lst)
+            return plot
+
 
     return plot
 
-
-def find_info(site):
+def find_info(site):#imput: the text of the site
+                    # outout: the dictionary that rapresent the infobox in the site
 
 # Let's create a dictionary whith the neeed information
 
@@ -96,7 +122,7 @@ def find_info(site):
 
     # Deal with Page not found:
 
-    if site.text == "Page not Found": # If the isn't the page we return -1 it takes less time to find it later
+    if "Page not Found" in site.text: # If the isn't the page we return -1 it takes less time to find it later
         for key, _ in info_dict.items():
             info_dict[key] = -1
         return info_dict
@@ -175,9 +201,8 @@ def find_info(site):
 
     return info_dict
 
-
-def clean_all(site):
-
+def clean_all(site):#imput: the text of the site
+                    # outout: a list that contains the info, the plot and the infobox dictionary of the site
     raw_intro = find_intro(site)
     raw_plot = find_plot(site)
     raw_info = find_info(site)
@@ -369,24 +394,25 @@ def clean_all(site):
 
     return [intro, plot, info_dict]
 
-def save_as_tsv():
+def save_as_tsv():# the main function that practically save the tsv files
 
-    path = "/home/tiago/Scrivania/Libri Magistrale/1st semester/ADM/HomeWork3/PagineMovie1/" # Where the .html file have been saved
-    save_in = "/home/tiago/Scrivania/Libri Magistrale/1st semester/ADM/HomeWork3/fileTsv_movie1/" # Where you want to save the .tsv file
-    log_path = "/home/tiago/Scrivania/Libri Magistrale/1st semester/ADM/HomeWork3/LogFile.txt" # Where you want to save the log file
-## se è un pat magari non è un file haahaha
+    path = "/Users/Dario/Desktop/HMW3_Data/" # Where the .html file have been saved
+    save_in = "/Users/Dario/Desktop/HMW3_tsv/" # Where you want to save the .tsv file
+    log_path = "/Users/Dario/Desktop/log.txt" # Where you want to save the log file
+
     log = open(log_path, "w")# A log file:  In case the some error occur we can see at which point it ccured
 
-    i = 0 # Change with 0 if you are working with all 30000 files or with the starting number of your file
-    for file in sorted(os.listdir(path)):
+
+    for file in os.listdir(path):
 
         if file.startswith('article_'): # there is a hidden file whith another name, in this way we avoid to open it
+
             site = BeautifulSoup(open("".join([path, str(file)])), "html.parser") # Let's open each page
 
             log.write("".join([path, str(file)]) + "\n")
 
             try:
-                with open("".join([save_in, "article_", str(i), ".tsv"]), "w") as file:
+                with open("".join([save_in, "article_", str(number_document_html(str(file))), ".tsv"]), "w") as file:
                     tsv_output = csv.writer(file, delimiter = '\t')
                     clean_el = clean_all(site) # Let's call the function that clean our data from "impurities"
                     intro_plot = [clean_el[0], clean_el[1]]
@@ -402,9 +428,6 @@ def save_as_tsv():
                     print("The error is in: ", last_line, traceback.print_exc())
                 break
 
-            i += 1
 
     log.close()
     print("Finish!")
-
- 
